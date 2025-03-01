@@ -81,7 +81,7 @@
 
 ## Meal Planning
 
-- [ ] Step 9: Create meal plan components
+- [x] Step 9: Create meal plan components
   - **Task**: Implement components for creating and viewing meal plans
   - **Files**:
     - `components/meal-plans/meal-plan-form.tsx`: Form for creating/editing meal plans
@@ -89,7 +89,7 @@
     - `components/meal-plans/recipe-selector.tsx`: Component for selecting recipes for each day
   - **Step Dependencies**: Steps 1, 6
 
-- [ ] Step 10: Implement meal plan list and detail components
+- [x] Step 10: Implement meal plan list and detail components
   - **Task**: Create components to display meal plans in list and detail views
   - **Files**:
     - `components/meal-plans/meal-plan-list.tsx`: List of meal plans
@@ -97,7 +97,7 @@
     - `components/meal-plans/meal-plan-detail.tsx`: Detailed view of a meal plan
   - **Step Dependencies**: Step 9
 
-- [ ] Step 11: Create meal planning pages
+- [x] Step 11: Create meal planning pages
   - **Task**: Implement pages for viewing, adding, and editing meal plans
   - **Files**:
     - `app/meal-plans/page.tsx`: Main meal plans listing page
@@ -108,7 +108,7 @@
 
 ## Shopping List
 
-- [ ] Step 12: Implement shopping list generation
+- [x] Step 12: Implement shopping list generation
   - **Task**: Create utility functions to generate shopping lists from meal plans
   - **Files**:
     - `lib/shopping-list.ts`: Functions to generate and manage shopping lists
@@ -116,7 +116,7 @@
     - `components/shopping/shopping-list-item.tsx`: Component for individual shopping list items
   - **Step Dependencies**: Steps 1, 2
 
-- [ ] Step 13: Create shopping list pages
+- [x] Step 13: Create shopping list pages
   - **Task**: Implement pages for viewing and managing shopping lists
   - **Files**:
     - `app/shopping/page.tsx`: Main shopping list page
