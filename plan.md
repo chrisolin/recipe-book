@@ -70,7 +70,7 @@
     - `app/recipes/[id]/edit/page.tsx`: Page for editing an existing recipe
   - **Step Dependencies**: Steps 2, 4, 5, 6
 
-- [ ] Step 8: Add recipe search and filtering
+- [x] Step 8: Add recipe search and filtering
   - **Task**: Implement search and tag filtering functionality for recipes
   - **Files**:
     - `components/recipes/search-bar.tsx`: Search input component

@@ -5,17 +5,20 @@ import Link from 'next/link';
 import { getAllRecipes } from '@/lib/data-manager';
 import { Recipe } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Plus, Search } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import RecipeList from '@/components/recipes/recipe-list';
-import RecipeTags from '@/components/recipes/recipe-tags';
+import SearchBar from '@/components/recipes/search-bar';
+import FilterTags from '@/components/recipes/filter-tags';
+import { processRecipes } from '@/lib/search';
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [allTags, setAllTags] = useState<string[]>([]);
+  const [requireAllTags, setRequireAllTags] = useState(true);
 
   // Fetch recipes
   useEffect(() => {
@@ -23,6 +26,7 @@ export default function RecipesPage() {
       try {
         const allRecipes = await getAllRecipes();
         setRecipes(allRecipes);
+        setFilteredRecipes(allRecipes);
         
         // Extract all unique tags
         const tags = Array.from(
@@ -39,6 +43,17 @@ export default function RecipesPage() {
     fetchRecipes();
   }, []);
 
+  // Process recipes when search term or tags change
+  useEffect(() => {
+    setFilteredRecipes(
+      processRecipes(recipes, {
+        searchTerm,
+        tags: selectedTags,
+        requireAllTags,
+      })
+    );
+  }, [recipes, searchTerm, selectedTags, requireAllTags]);
+
   // Handle tag selection
   const handleTagClick = (tag: string) => {
     setSelectedTags((prev) =>
@@ -54,6 +69,11 @@ export default function RecipesPage() {
     setSelectedTags([]);
   };
 
+  // Toggle between "match all tags" and "match any tag"
+  const toggleTagRequirement = () => {
+    setRequireAllTags((prev) => !prev);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -67,57 +87,37 @@ export default function RecipesPage() {
       </div>
 
       <div className="space-y-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search recipes..."
-            className="pl-10"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <SearchBar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search recipes by title, ingredients, or tags..."
+        />
 
-        {allTags.length > 0 && (
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <h2 className="text-sm font-medium">Filter by Tags</h2>
-              {selectedTags.length > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="h-auto py-1 px-2 text-xs"
-                >
-                  Clear Filters
-                </Button>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {allTags.map((tag) => (
-                <span
-                  key={tag}
-                  onClick={() => handleTagClick(tag)}
-                  className={`
-                    text-xs px-2 py-1 rounded-full cursor-pointer
-                    ${
-                      selectedTags.includes(tag)
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-primary/10 text-primary hover:bg-primary/20'
-                    }
-                  `}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+        <FilterTags
+          allTags={allTags}
+          selectedTags={selectedTags}
+          onTagClick={handleTagClick}
+          onClearAll={clearFilters}
+        />
+
+        {selectedTags.length > 1 && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Match:</span>
+            <Button
+              variant="outline"
+              size="sm"
+              className={`h-7 text-xs ${requireAllTags ? 'bg-primary/10' : ''}`}
+              onClick={toggleTagRequirement}
+            >
+              {requireAllTags ? 'All tags' : 'Any tag'}
+            </Button>
           </div>
         )}
       </div>
 
       <RecipeList
-        initialRecipes={recipes}
-        searchTerm={searchTerm}
-        selectedTags={selectedTags}
+        initialRecipes={filteredRecipes}
+        loading={loading}
       />
     </div>
   );

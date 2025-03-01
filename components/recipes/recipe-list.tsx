@@ -5,21 +5,19 @@ import RecipeCard from './recipe-card';
 
 interface RecipeListProps {
   initialRecipes?: Recipe[];
-  searchTerm?: string;
-  selectedTags?: string[];
+  loading?: boolean;
 }
 
 export default function RecipeList({
   initialRecipes,
-  searchTerm = '',
-  selectedTags = [],
+  loading: externalLoading,
 }: RecipeListProps) {
   const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes || []);
-  const [loading, setLoading] = useState(!initialRecipes);
+  const [loading, setLoading] = useState(externalLoading !== undefined ? externalLoading : !initialRecipes);
 
   // Fetch recipes if not provided
   useEffect(() => {
-    if (!initialRecipes) {
+    if (!initialRecipes && externalLoading === undefined) {
       const fetchRecipes = async () => {
         try {
           const allRecipes = await getAllRecipes();
@@ -33,34 +31,21 @@ export default function RecipeList({
 
       fetchRecipes();
     }
+  }, [initialRecipes, externalLoading]);
+
+  // Update recipes when initialRecipes changes
+  useEffect(() => {
+    if (initialRecipes) {
+      setRecipes(initialRecipes);
+    }
   }, [initialRecipes]);
 
-  // Filter recipes based on search term and selected tags
-  const filteredRecipes = recipes.filter((recipe) => {
-    // Filter by search term
-    const matchesSearch = searchTerm
-      ? recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        recipe.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        recipe.ingredients.some((ingredient) =>
-          ingredient.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      : true;
-
-    // Filter by selected tags
-    const matchesTags =
-      selectedTags.length > 0
-        ? selectedTags.every((tag) => recipe.tags.includes(tag))
-        : true;
-
-    return matchesSearch && matchesTags;
-  });
-
-  // Sort recipes by last used or created date
-  const sortedRecipes = [...filteredRecipes].sort((a, b) => {
-    const dateA = a.lastUsed || a.createdAt;
-    const dateB = b.lastUsed || b.createdAt;
-    return new Date(dateB).getTime() - new Date(dateA).getTime();
-  });
+  // Update loading state when externalLoading changes
+  useEffect(() => {
+    if (externalLoading !== undefined) {
+      setLoading(externalLoading);
+    }
+  }, [externalLoading]);
 
   if (loading) {
     return (
@@ -75,14 +60,12 @@ export default function RecipeList({
     );
   }
 
-  if (sortedRecipes.length === 0) {
+  if (recipes.length === 0) {
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">No recipes found</h3>
         <p className="text-muted-foreground mt-1">
-          {searchTerm || selectedTags.length > 0
-            ? 'Try adjusting your search or filters'
-            : 'Add your first recipe to get started'}
+          Try adjusting your search or filters
         </p>
       </div>
     );
@@ -90,7 +73,7 @@ export default function RecipeList({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {sortedRecipes.map((recipe) => (
+      {recipes.map((recipe) => (
         <RecipeCard key={recipe.id} recipe={recipe} />
       ))}
     </div>
