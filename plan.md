@@ -44,7 +44,7 @@
 
 ## Recipe Management
 
-- [ ] Step 5: Create recipe form components
+- [x] Step 5: Create recipe form components
   - **Task**: Implement form components for adding and editing recipes
   - **Files**:
     - `components/recipes/recipe-form.tsx`: Form for creating/editing recipes
@@ -52,7 +52,7 @@
     - `components/recipes/tag-input.tsx`: Component for managing recipe tags
   - **Step Dependencies**: Steps 1, 3
 
-- [ ] Step 6: Implement recipe list and detail components
+- [x] Step 6: Implement recipe list and detail components
   - **Task**: Create components to display recipes in list and detail views
   - **Files**:
     - `components/recipes/recipe-list.tsx`: List of recipes with filtering
@@ -61,7 +61,7 @@
     - `components/recipes/recipe-tags.tsx`: Component to display recipe tags
   - **Step Dependencies**: Steps 1, 3
 
-- [ ] Step 7: Create recipe management pages
+- [x] Step 7: Create recipe management pages
   - **Task**: Implement pages for viewing, adding, and editing recipes
   - **Files**:
     - `app/recipes/page.tsx`: Main recipes listing page
