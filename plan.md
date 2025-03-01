@@ -20,7 +20,7 @@
 
 ## UI Components
 
-- [ ] Step 3: Install and set up shadcn UI components
+- [x] Step 3: Install and set up shadcn UI components
   - **Task**: Install basic shadcn components needed for the application
   - **Files**: 
     - `components/ui/button.tsx`: Button component
@@ -31,7 +31,7 @@
     - `components/ui/card.tsx`: Card component
     - `components/ui/form.tsx`: Form component
   - **Step Dependencies**: None
-  - **User Instructions**: Run `npx shadcn-ui@latest add button input textarea select dialog card form`
+  - **User Instructions**: Run `npx shadcn@latest add button input textarea select dialog card form`
 
 - [ ] Step 4: Create shared layout components
   - **Task**: Implement the application layout with header, navigation, and main content area
