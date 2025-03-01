@@ -134,7 +134,7 @@ export const loadFromOPFS = async (): Promise<AppData | null> => {
     return data;
   } catch (error) {
     // If the file doesn't exist, return null
-    if ((error as any).name === 'NotFoundError') {
+    if ((error as Error & { name?: string }).name === 'NotFoundError') {
       console.info('No existing data found in OPFS');
       return null;
     }
@@ -164,7 +164,7 @@ export const deleteFromOPFS = async (): Promise<boolean> => {
     return true;
   } catch (error) {
     // If the file doesn't exist, consider it a success
-    if ((error as any).name === 'NotFoundError') {
+    if ((error as Error & { name?: string }).name === 'NotFoundError') {
       return true;
     }
     

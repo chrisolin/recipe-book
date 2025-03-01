@@ -2,7 +2,7 @@
  * Shopping list utility functions
  * Provides functions for generating and managing shopping lists
  */
-import { Recipe, ShoppingItem, ShoppingList } from './types';
+import { Recipe, ShoppingItem, ShoppingList, MealPlan } from './types';
 import { 
   generateShoppingList as generateShoppingListFromData,
   getShoppingListById,
@@ -50,7 +50,7 @@ export const getShoppingListWithRecipes = async (id: string): Promise<{
  */
 export const getShoppingListWithMealPlan = async (id: string): Promise<{
   shoppingList: ShoppingList | null;
-  mealPlan: any | null;
+  mealPlan: MealPlan | null;
   recipes: Record<string, Recipe>;
 }> => {
   const { shoppingList, recipes } = await getShoppingListWithRecipes(id);
@@ -106,4 +106,27 @@ export const groupShoppingListByRecipe = (
  */
 export const removeShoppingList = async (id: string): Promise<boolean> => {
   return deleteShoppingList(id);
+};
+
+/**
+ * Generate a shopping list from a meal plan
+ */
+export const generateShoppingListFromMealPlan = async (
+  mealPlanId: string,
+  name: string
+): Promise<ShoppingList | null> => {
+  // Get the meal plan
+  const mealPlan = await getMealPlanById(mealPlanId);
+  if (!mealPlan) return null;
+  
+  // Get all recipes in the meal plan
+  const recipeIds = mealPlan.meals.map(meal => meal.recipeId);
+  
+  // Get the recipes
+  const recipePromises = recipeIds.map(id => getRecipeById(id));
+  const recipeResults = await Promise.all(recipePromises);
+  const validRecipes = recipeResults.filter(Boolean) as Recipe[];
+  
+  // Generate the shopping list
+  return generateShoppingListFromData(mealPlanId);
 }; 

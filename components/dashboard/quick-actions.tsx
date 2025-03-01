@@ -7,8 +7,7 @@ import {
   BookOpen, 
   CalendarRange, 
   PlusCircle, 
-  ShoppingCart, 
-  Utensils 
+  ShoppingCart
 } from 'lucide-react';
 
 export default function QuickActions() {

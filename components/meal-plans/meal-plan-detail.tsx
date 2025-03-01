@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarRange, Pencil, Trash2, ShoppingCart, UtensilsCrossed } from 'lucide-react';
 
 interface MealPlanDetailProps {
@@ -27,17 +27,6 @@ export default function MealPlanDetail({ mealPlan }: MealPlanDetailProps) {
   const [isGeneratingList, setIsGeneratingList] = useState(false);
   const [mealsByDate, setMealsByDate] = useState<Record<string, { date: Date; meals: { id: string; recipeId: string; notes?: string; recipe?: Recipe }[] }>>({});
   const [loading, setLoading] = useState(true);
-
-  // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
-  };
 
   // Format date range for display
   const formatDateRange = () => {

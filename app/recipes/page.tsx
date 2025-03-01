@@ -131,7 +131,6 @@ export default function RecipesPage() {
                 allTags={allTags}
                 selectedTags={selectedTags}
                 onTagClick={handleTagClick}
-                onClearAll={clearFilters}
               />
 
               {selectedTags.length > 1 && (

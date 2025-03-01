@@ -8,8 +8,7 @@ import {
   Recipe, 
   MealPlan, 
   ShoppingList,
-  ShoppingItem,
-  Meal
+  ShoppingItem
 } from './types';
 import {
   DEFAULT_APP_DATA,

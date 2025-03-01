@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import RecipeTags from './recipe-tags';
 import { Pencil, Trash2, Clock } from 'lucide-react';
 
@@ -119,7 +119,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           <DialogHeader>
             <DialogTitle>Delete Recipe</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{recipe.title}"? This action
+              Are you sure you want to delete &quot;{recipe.title}&quot;? This action
               cannot be undone.
             </DialogDescription>
           </DialogHeader>

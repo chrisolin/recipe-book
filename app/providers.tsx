@@ -145,7 +145,7 @@ export function Providers({ children }: { children: ReactNode }) {
         root.classList.add(theme);
       }
     }
-  }, [mounted]);
+  }, [mounted, refreshData]);
 
   return (
     <DataContext.Provider

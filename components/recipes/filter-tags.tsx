@@ -1,11 +1,9 @@
-import { X, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Check } from 'lucide-react';
 
 interface FilterTagsProps {
   allTags: string[];
   selectedTags: string[];
   onTagClick: (tag: string) => void;
-  onClearAll: () => void;
   className?: string;
 }
 
@@ -13,7 +11,6 @@ export default function FilterTags({
   allTags,
   selectedTags,
   onTagClick,
-  onClearAll,
   className = '',
 }: FilterTagsProps) {
   if (allTags.length === 0) {

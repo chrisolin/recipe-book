@@ -59,12 +59,6 @@ export default function RecipeSelector({
     return acc;
   }, {});
 
-  // Get recipe title by ID
-  const getRecipeTitle = (recipeId: string) => {
-    const recipe = recipes.find(r => r.id === recipeId);
-    return recipe ? recipe.title : 'Unknown Recipe';
-  };
-
   if (meals.length === 0) {
     return (
       <Card>

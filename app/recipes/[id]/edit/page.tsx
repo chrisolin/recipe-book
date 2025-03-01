@@ -55,7 +55,7 @@ export default function EditRecipePage({ params }: EditRecipePageProps) {
       <div className="text-center py-12">
         <h2 className="text-xl font-semibold mb-2">{error || 'Recipe not found'}</h2>
         <p className="text-muted-foreground mb-6">
-          The recipe you're trying to edit doesn't exist or couldn't be loaded.
+          The recipe you&apos;re trying to edit doesn&apos;t exist or couldn&apos;t be loaded.
         </p>
         <Button onClick={() => router.push('/recipes')}>
           <ArrowLeft className="h-4 w-4 mr-2" />

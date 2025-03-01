@@ -7,8 +7,6 @@ import { ChevronLeft } from 'lucide-react';
 import MealPlanForm from '@/components/meal-plans/meal-plan-form';
 
 export default function NewMealPlanPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">

@@ -76,7 +76,7 @@ export const importData = async (file: File): Promise<AppData> => {
 /**
  * Validate imported data
  */
-const validateImportedData = (data: any): data is AppData => {
+const validateImportedData = (data: unknown): data is AppData => {
   // Check if the data has the required properties
   if (!data || typeof data !== 'object') return false;
   if (!('recipes' in data) || typeof data.recipes !== 'object') return false;

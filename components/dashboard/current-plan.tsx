@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAppData } from '@/app/providers';
-import { MealPlan, Recipe } from '@/lib/types';
+import { MealPlan, Recipe, Meal } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CalendarRange, ChevronRight, PlusCircle, ShoppingCart } from 'lucide-react';
@@ -11,7 +11,7 @@ import { CalendarRange, ChevronRight, PlusCircle, ShoppingCart } from 'lucide-re
 export default function CurrentPlan() {
   const { data, isLoading } = useAppData();
   const [currentPlan, setCurrentPlan] = useState<MealPlan | null>(null);
-  const [todaysMeals, setTodaysMeals] = useState<{meal: any, recipe: Recipe}[]>([]);
+  const [todaysMeals, setTodaysMeals] = useState<{meal: Meal, recipe: Recipe}[]>([]);
   
   useEffect(() => {
     if (data && !isLoading) {
@@ -98,8 +98,8 @@ export default function CurrentPlan() {
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <CalendarRange className="h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-medium mb-2">No active meal plan</h3>
-            <p className="text-muted-foreground mb-4">
-              You don't have a meal plan that includes today's date.
+            <p className="text-muted-foreground mb-6">
+              You don&apos;t have a meal plan that includes today&apos;s date.
             </p>
             <Button asChild>
               <Link href="/meal-plans/new">
