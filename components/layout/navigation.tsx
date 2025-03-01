@@ -7,7 +7,8 @@ import {
   Home, 
   BookOpen, 
   Calendar, 
-  ShoppingCart 
+  ShoppingCart,
+  Settings
 } from "lucide-react";
 
 interface NavItem {
@@ -44,6 +45,12 @@ export function Navigation({ className }: { className?: string }) {
       href: "/shopping",
       icon: <ShoppingCart className="h-5 w-5" />,
       isActive: (path) => path.startsWith("/shopping")
+    },
+    {
+      title: "Settings",
+      href: "/settings",
+      icon: <Settings className="h-5 w-5" />,
+      isActive: (path) => path.startsWith("/settings")
     }
   ];
 

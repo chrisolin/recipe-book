@@ -144,15 +144,14 @@
 
 ## Offline Functionality and Testing
 
-- [ ] Step 16: Finalize offline functionality
+- [x] Step 16: Finalize offline functionality
   - **Task**: Ensure all features work properly offline and data persists correctly
   - **Files**:
     - `lib/storage.ts`: Enhance with error handling and offline detection
-    - `components/offline-indicator.tsx`: Component to show offline status
     - `app/providers.tsx`: Update to handle offline scenarios
   - **Step Dependencies**: Steps 2, 7, 11, 13
 
-- [ ] Step 17: Create data export/import functionality
+- [x] Step 17: Create data export/import functionality
   - **Task**: Implement features to allow users to backup and restore their data
   - **Files**:
     - `lib/export-import.ts`: Utility functions for exporting and importing data

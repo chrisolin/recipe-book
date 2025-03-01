@@ -17,6 +17,13 @@ export const DEFAULT_APP_DATA: AppData = {
 };
 
 /**
+ * Check if the browser is online
+ */
+export const isOnline = (): boolean => {
+  return typeof navigator !== 'undefined' && navigator.onLine;
+};
+
+/**
  * Check if OPFS is supported in the current browser
  */
 export const isOPFSSupported = (): boolean => {
@@ -37,6 +44,39 @@ export const getOPFSRoot = async (): Promise<FileSystemDirectoryHandle | null> =
   } catch (error) {
     console.error('Failed to get OPFS root directory:', error);
     return null;
+  }
+};
+
+/**
+ * Request storage persistence to prevent data loss
+ * Returns true if persistence is granted
+ */
+export const requestStoragePersistence = async (): Promise<boolean> => {
+  if (typeof navigator === 'undefined' || !('storage' in navigator) || !('persist' in navigator.storage)) {
+    return false;
+  }
+
+  try {
+    return await navigator.storage.persist();
+  } catch (error) {
+    console.error('Failed to request storage persistence:', error);
+    return false;
+  }
+};
+
+/**
+ * Check if storage persistence is granted
+ */
+export const isStoragePersisted = async (): Promise<boolean> => {
+  if (typeof navigator === 'undefined' || !('storage' in navigator) || !('persisted' in navigator.storage)) {
+    return false;
+  }
+
+  try {
+    return await navigator.storage.persisted();
+  } catch (error) {
+    console.error('Failed to check storage persistence:', error);
+    return false;
   }
 };
 
@@ -66,7 +106,8 @@ export const saveToOPFS = async (data: AppData): Promise<boolean> => {
     return true;
   } catch (error) {
     console.error('Failed to save data to OPFS:', error);
-    return false;
+    // Try to save to localStorage as a fallback
+    return saveToLocalStorage(data);
   }
 };
 
@@ -99,6 +140,14 @@ export const loadFromOPFS = async (): Promise<AppData | null> => {
     }
     
     console.error('Failed to load data from OPFS:', error);
+    
+    // Try to load from localStorage as a fallback
+    const localData = loadFromLocalStorage();
+    if (localData) {
+      console.info('Loaded data from localStorage as fallback');
+      return localData;
+    }
+    
     return null;
   }
 };
@@ -167,5 +216,39 @@ export const deleteFromLocalStorage = (): boolean => {
   } catch (error) {
     console.error('Failed to delete data from localStorage:', error);
     return false;
+  }
+};
+
+/**
+ * Estimate the storage usage in bytes
+ */
+export const estimateStorageUsage = async (): Promise<number> => {
+  if (typeof navigator === 'undefined' || !('storage' in navigator) || !('estimate' in navigator.storage)) {
+    return 0;
+  }
+
+  try {
+    const estimate = await navigator.storage.estimate();
+    return estimate.usage || 0;
+  } catch (error) {
+    console.error('Failed to estimate storage usage:', error);
+    return 0;
+  }
+};
+
+/**
+ * Estimate the storage quota in bytes
+ */
+export const estimateStorageQuota = async (): Promise<number> => {
+  if (typeof navigator === 'undefined' || !('storage' in navigator) || !('estimate' in navigator.storage)) {
+    return 0;
+  }
+
+  try {
+    const estimate = await navigator.storage.estimate();
+    return estimate.quota || 0;
+  } catch (error) {
+    console.error('Failed to estimate storage quota:', error);
+    return 0;
   }
 }; 

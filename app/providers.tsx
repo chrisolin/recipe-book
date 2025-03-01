@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { AppData } from '@/lib/types';
 import { initializeDataManager } from '@/lib/data-manager';
 import { migrateData, needsMigration } from '@/lib/migrations';
+import { isOnline, requestStoragePersistence, isStoragePersisted } from '@/lib/storage';
 
 // Create a context for the app data
 interface DataContextType {
@@ -11,6 +12,9 @@ interface DataContextType {
   isError: boolean;
   data: AppData | null;
   refreshData: () => Promise<void>;
+  isOnline: boolean;
+  isPersisted: boolean;
+  requestPersistence: () => Promise<boolean>;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -18,6 +22,9 @@ const DataContext = createContext<DataContextType>({
   isError: false,
   data: null,
   refreshData: async () => {},
+  isOnline: true,
+  isPersisted: false,
+  requestPersistence: async () => false,
 });
 
 // Hook to use the data context
@@ -29,6 +36,8 @@ export function Providers({ children }: { children: ReactNode }) {
   const [isError, setIsError] = useState(false);
   const [data, setData] = useState<AppData | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [onlineStatus, setOnlineStatus] = useState(true);
+  const [persistedStatus, setPersistedStatus] = useState(false);
 
   // Function to load data
   const loadData = async () => {
@@ -68,6 +77,54 @@ export function Providers({ children }: { children: ReactNode }) {
     await loadData();
   };
 
+  // Check online status and set up listeners
+  useEffect(() => {
+    if (mounted) {
+      // Set initial online status
+      setOnlineStatus(isOnline());
+      
+      // Set up event listeners for online/offline events
+      const handleOnline = () => {
+        setOnlineStatus(true);
+        // Refresh data when coming back online
+        refreshData();
+      };
+      
+      const handleOffline = () => {
+        setOnlineStatus(false);
+      };
+      
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+      
+      // Check storage persistence status
+      const checkPersistence = async () => {
+        const persisted = await isStoragePersisted();
+        setPersistedStatus(persisted);
+        
+        // If not persisted, try to request it automatically
+        if (!persisted) {
+          const granted = await requestStoragePersistence();
+          setPersistedStatus(granted);
+        }
+      };
+      
+      checkPersistence();
+      
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      };
+    }
+  }, [mounted]);
+
+  // Function to request storage persistence
+  const requestPersistence = async (): Promise<boolean> => {
+    const granted = await requestStoragePersistence();
+    setPersistedStatus(granted);
+    return granted;
+  };
+
   // Apply theme from localStorage on client-side
   useEffect(() => {
     if (mounted) {
@@ -97,9 +154,17 @@ export function Providers({ children }: { children: ReactNode }) {
         isError,
         data,
         refreshData,
+        isOnline: onlineStatus,
+        isPersisted: persistedStatus,
+        requestPersistence,
       }}
     >
       {children}
+      {!onlineStatus && (
+        <div className="fixed bottom-4 left-4 right-4 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 p-2 rounded-md shadow-md text-sm text-center">
+          You are currently offline. Changes will be saved locally and synced when you reconnect.
+        </div>
+      )}
     </DataContext.Provider>
   );
 } 
