@@ -2,7 +2,7 @@
   "name": "recipe-book",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://github.com/yourusername/recipe-book",
+  "homepage": "https://chrisolin.github.io/recipe-book/",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
