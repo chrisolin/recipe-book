@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import ThemeToggle from "../theme-toggle";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,10 +60,16 @@ export function Header() {
               Shopping Lists
             </Link>
           </div>
+          
+          {/* Theme Toggle */}
+          <div className="flex items-center">
+            <ThemeToggle />
+          </div>
         </nav>
         
-        {/* Mobile Menu Button */}
-        <div className="flex md:hidden flex-1 justify-end">
+        {/* Mobile Menu Button and Theme Toggle */}
+        <div className="flex md:hidden flex-1 justify-end items-center space-x-1">
+          <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={toggleMobileMenu} aria-label="Toggle Menu">
             <Menu className="h-5 w-5" />
           </Button>

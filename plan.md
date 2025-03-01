@@ -125,7 +125,7 @@
 
 ## Dashboard and Integration
 
-- [ ] Step 14: Create home page dashboard
+- [x] Step 14: Create home page dashboard
   - **Task**: Implement the main dashboard showing current meal plan and quick access to features
   - **Files**:
     - `app/page.tsx`: Update to show dashboard
@@ -134,7 +134,7 @@
     - `components/dashboard/recent-recipes.tsx`: Component showing recently used recipes
   - **Step Dependencies**: Steps 7, 11, 13
 
-- [ ] Step 15: Implement theme and mobile responsiveness
+- [x] Step 15: Implement theme and mobile responsiveness
   - **Task**: Enhance UI with theming and ensure good mobile experience
   - **Files**:
     - `app/globals.css`: Update for additional theme styling

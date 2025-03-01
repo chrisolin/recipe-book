@@ -28,6 +28,7 @@ export function Providers({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [data, setData] = useState<AppData | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   // Function to load data
   const loadData = async () => {
@@ -57,10 +58,37 @@ export function Providers({ children }: { children: ReactNode }) {
     loadData();
   }, []);
 
+  // Set mounted state after hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Function to refresh data
   const refreshData = async () => {
     await loadData();
   };
+
+  // Apply theme from localStorage on client-side
+  useEffect(() => {
+    if (mounted) {
+      const theme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
+      const root = window.document.documentElement;
+      
+      // Remove any existing theme classes
+      root.classList.remove('light', 'dark');
+      
+      if (theme === 'system' || !theme) {
+        // Check system preference
+        const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+        root.classList.add(systemPreference);
+      } else {
+        // Apply the selected theme
+        root.classList.add(theme);
+      }
+    }
+  }, [mounted]);
 
   return (
     <DataContext.Provider
