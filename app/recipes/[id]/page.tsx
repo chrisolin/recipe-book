@@ -9,9 +9,9 @@ import RecipeDetail from '@/components/recipes/recipe-detail';
 import { ArrowLeft } from 'lucide-react';
 
 interface RecipePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function RecipePage({ params }: RecipePageProps) {
@@ -23,7 +23,8 @@ export default function RecipePage({ params }: RecipePageProps) {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const recipeData = await getRecipeById(params.id);
+        const { id } = await params;
+        const recipeData = await getRecipeById(id);
         if (!recipeData) {
           setError('Recipe not found');
         } else {
@@ -38,7 +39,7 @@ export default function RecipePage({ params }: RecipePageProps) {
     };
 
     fetchRecipe();
-  }, [params.id]);
+  }, [params]);
 
   if (loading) {
     return (

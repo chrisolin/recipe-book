@@ -7,9 +7,9 @@ import { MealPlan } from '@/lib/types';
 import MealPlanDetail from '@/components/meal-plans/meal-plan-detail';
 
 interface MealPlanPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function MealPlanPage({ params }: MealPlanPageProps) {
@@ -21,7 +21,8 @@ export default function MealPlanPage({ params }: MealPlanPageProps) {
   useEffect(() => {
     const fetchMealPlan = async () => {
       try {
-        const plan = await getMealPlanById(params.id);
+        const { id } = await params;
+        const plan = await getMealPlanById(id);
         if (plan) {
           setMealPlan(plan);
         } else {
@@ -39,7 +40,7 @@ export default function MealPlanPage({ params }: MealPlanPageProps) {
     };
 
     fetchMealPlan();
-  }, [params.id, router]);
+  }, [params, router]);
 
   if (loading) {
     return (

@@ -10,9 +10,9 @@ import { ChevronLeft } from 'lucide-react';
 import MealPlanForm from '@/components/meal-plans/meal-plan-form';
 
 interface EditMealPlanPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function EditMealPlanPage({ params }: EditMealPlanPageProps) {
@@ -20,11 +20,14 @@ export default function EditMealPlanPage({ params }: EditMealPlanPageProps) {
   const [mealPlan, setMealPlan] = useState<MealPlan | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [mealPlanId, setMealPlanId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMealPlan = async () => {
       try {
-        const plan = await getMealPlanById(params.id);
+        const { id } = await params;
+        setMealPlanId(id);
+        const plan = await getMealPlanById(id);
         if (plan) {
           setMealPlan(plan);
         } else {
@@ -42,7 +45,7 @@ export default function EditMealPlanPage({ params }: EditMealPlanPageProps) {
     };
 
     fetchMealPlan();
-  }, [params.id, router]);
+  }, [params, router]);
 
   if (loading) {
     return (
@@ -73,7 +76,7 @@ export default function EditMealPlanPage({ params }: EditMealPlanPageProps) {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
-          <Link href={`/meal-plans/${params.id}`}>
+          <Link href={`/meal-plans/${mealPlanId}`}>
             <ChevronLeft className="h-4 w-4 mr-1" />
             Back to Meal Plan
           </Link>

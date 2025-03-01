@@ -9,13 +9,13 @@ export const metadata: Metadata = {
 };
 
 interface ShoppingListPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function ShoppingListPage({ params }: ShoppingListPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const { shoppingList, mealPlan, recipes } = await getShoppingListWithMealPlan(id);
   
   if (!shoppingList) {
