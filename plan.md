@@ -2,7 +2,7 @@
 
 ## Data Management
 
-- [ ] Step 1: Create data models and local storage utilities
+- [x] Step 1: Create data models and local storage utilities
   - **Task**: Define TypeScript interfaces for Recipe, MealPlan, and other data structures, then create utility functions to interact with the Origin Private File System (OPFS)
   - **Files**:
     - `lib/types.ts`: Define interface types for Recipe, MealPlan, etc.
@@ -10,7 +10,7 @@
     - `lib/data-manager.ts`: Implement higher-level functions for managing application data
   - **Step Dependencies**: None
 
-- [ ] Step 2: Implement data initialization and migration
+- [x] Step 2: Implement data initialization and migration
   - **Task**: Create a system to initialize the data store on first run and handle data migrations for future updates
   - **Files**:
     - `lib/data-manager.ts`: Add initialization and migration functions
