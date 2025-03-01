@@ -60,13 +60,19 @@ export default function ThemeToggle() {
     });
   };
 
+  // Determine if dark mode is active
+  const isDarkMode = mounted && (
+    theme === 'dark' || 
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  );
+
   // Avoid rendering the toggle with the wrong icon during SSR
   if (!mounted) {
     return (
       <Button
         variant="ghost"
         size="icon"
-        className="h-9 w-9"
+        className="h-9 w-9 opacity-0"
         disabled
       >
         <Moon className="h-4 w-4" />
@@ -79,14 +85,28 @@ export default function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label="Toggle theme"
-      className="h-9 w-9"
+      aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+      className="relative h-9 w-9 overflow-hidden rounded-md transition-colors hover:bg-muted/80"
     >
-      {theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? (
-        <Sun className="h-4 w-4" />
-      ) : (
-        <Moon className="h-4 w-4" />
-      )}
+      <div className="relative h-full w-full">
+        {/* Sun icon */}
+        <Sun 
+          className={`absolute h-4 w-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-spring ${
+            isDarkMode 
+              ? 'rotate-0 scale-100 opacity-100' 
+              : 'rotate-90 scale-0 opacity-0'
+          }`} 
+        />
+        
+        {/* Moon icon */}
+        <Moon 
+          className={`absolute h-4 w-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-spring ${
+            !isDarkMode 
+              ? 'rotate-0 scale-100 opacity-100' 
+              : '-rotate-90 scale-0 opacity-0'
+          }`} 
+        />
+      </div>
     </Button>
   );
 } 
