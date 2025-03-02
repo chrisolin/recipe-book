@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getMealPlanById, getAllMealPlans } from '@/lib/data-manager';
