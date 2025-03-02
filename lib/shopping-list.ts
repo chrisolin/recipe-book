@@ -85,8 +85,7 @@ export const toggleShoppingListItem = async (
  * Group shopping list items by recipe
  */
 export const groupShoppingListByRecipe = (
-  shoppingList: ShoppingList,
-  recipes: Record<string, Recipe>
+  shoppingList: ShoppingList
 ): Record<string, ShoppingItem[]> => {
   const grouped: Record<string, ShoppingItem[]> = {};
   
@@ -112,21 +111,11 @@ export const removeShoppingList = async (id: string): Promise<boolean> => {
  * Generate a shopping list from a meal plan
  */
 export const generateShoppingListFromMealPlan = async (
-  mealPlanId: string,
-  name: string
+  mealPlanId: string
 ): Promise<ShoppingList | null> => {
   // Get the meal plan
   const mealPlan = await getMealPlanById(mealPlanId);
   if (!mealPlan) return null;
-  
-  // Get all recipes in the meal plan
-  const recipeIds = mealPlan.meals.map(meal => meal.recipeId);
-  
-  // Get the recipes
-  const recipePromises = recipeIds.map(id => getRecipeById(id));
-  const recipeResults = await Promise.all(recipePromises);
-  const validRecipes = recipeResults.filter(Boolean) as Recipe[];
-  
-  // Generate the shopping list
+    // Generate the shopping list
   return generateShoppingListFromData(mealPlanId);
 }; 

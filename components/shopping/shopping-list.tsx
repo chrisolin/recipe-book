@@ -20,7 +20,7 @@ export function ShoppingList({ shoppingList, recipes, mealPlanName }: ShoppingLi
   const [isDeleting, setIsDeleting] = useState(false);
   
   // Group items by recipe
-  const groupedItems = groupShoppingListByRecipe(shoppingList, recipes);
+  const groupedItems = groupShoppingListByRecipe(shoppingList);
   
   // Calculate progress
   const totalItems = shoppingList.items.length;

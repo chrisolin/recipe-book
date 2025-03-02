@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { AppData } from '@/lib/types';
 import { initializeDataManager } from '@/lib/data-manager';
 import { migrateData, needsMigration } from '@/lib/migrations';
@@ -73,9 +73,9 @@ export function Providers({ children }: { children: ReactNode }) {
   }, []);
 
   // Function to refresh data
-  const refreshData = async () => {
+  const refreshData = useCallback(async () => {
     await loadData();
-  };
+  }, []);
 
   // Check online status and set up listeners
   useEffect(() => {
@@ -144,6 +144,7 @@ export function Providers({ children }: { children: ReactNode }) {
         // Apply the selected theme
         root.classList.add(theme);
       }
+      refreshData();
     }
   }, [mounted, refreshData]);
 
