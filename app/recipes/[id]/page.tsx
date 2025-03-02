@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getRecipeById } from '@/lib/data-manager';
+import { getRecipeById, getAllRecipes } from '@/lib/data-manager';
 import { Recipe } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import RecipeDetail from '@/components/recipes/recipe-detail';
@@ -12,6 +12,14 @@ interface RecipePageProps {
   params: Promise<{
     id: string;
   }>;
+}
+
+// This function generates all possible recipe paths at build time
+export async function generateStaticParams() {
+  const recipes = await getAllRecipes();
+  return recipes.map((recipe) => ({
+    id: recipe.id,
+  }));
 }
 
 export default function RecipePage({ params }: RecipePageProps) {

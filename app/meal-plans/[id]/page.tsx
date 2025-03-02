@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getMealPlanById } from '@/lib/data-manager';
+import { getMealPlanById, getAllMealPlans } from '@/lib/data-manager';
 import { MealPlan } from '@/lib/types';
 import MealPlanDetail from '@/components/meal-plans/meal-plan-detail';
 
@@ -10,6 +10,14 @@ interface MealPlanPageProps {
   params: Promise<{
     id: string;
   }>;
+}
+
+// This function generates all possible meal plan paths at build time
+export async function generateStaticParams() {
+  const mealPlans = await getAllMealPlans();
+  return mealPlans.map((plan) => ({
+    id: plan.id,
+  }));
 }
 
 export default function MealPlanPage({ params }: MealPlanPageProps) {
